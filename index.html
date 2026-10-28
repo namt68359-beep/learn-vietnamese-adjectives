@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Learn Vietnamese with Ha – Essential Vietnamese Adjectives</title>
+<style>
+:root{--bg:#fff8f0;--card:#fff;--ink:#2d2a32;--muted:#6b6470;--a:#ff7a59;--b:#4fb3bf;--c:#8e7dea;--ok:#2fa866;--bad:#e5484d;--line:#eadfd4}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:50px}
+header{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line);padding:12px 20px}
+.hrow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;max-width:1000px;margin:auto}
+h1{font-size:1.15rem;margin:0}
+.sub{color:var(--muted);font-size:.85rem}
+.stats{display:flex;gap:10px;align-items:center;font-size:.9rem;flex-wrap:wrap}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;max-width:1000px;margin:10px auto 0}
+.bar div{height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--c));transition:width .4s}
+.toggle,.chip,.opt,.btn{border:none;border-radius:999px;padding:8px 14px;cursor:pointer;background:#fff;font:inherit;color:var(--ink);box-shadow:0 1px 4px #0001}
+.toggle{border:1px solid var(--line)}
+.chip.on,.btn.on{background:var(--b);color:#fff}
+nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;padding:20px;max-width:1000px;margin:auto}
+.tile{background:var(--card);border:none;border-radius:16px;padding:16px;text-align:left;cursor:pointer;box-shadow:0 2px 8px #0001;font:inherit;color:inherit;display:flex;flex-direction:column;gap:2px}
+.tile.on{outline:3px solid var(--a)}
+.tile .ic{font-size:2rem}
+.tile b{margin-top:6px}
+.tile small{color:var(--muted);font-size:.85rem}
+main{max-width:1000px;margin:auto;padding:0 20px}
+.groups{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.word{background:var(--card);border-radius:18px;padding:18px;text-align:center;box-shadow:0 2px 10px #0001;display:flex;flex-direction:column;gap:4px;align-items:center}
+.word.learned{outline:2px solid var(--ok)}
+.em{font-size:3rem;line-height:1.2}
+.vi{font-size:1.5rem;font-weight:700;color:var(--a)}
+.en{color:var(--muted);font-size:.92rem}
+.ex{font-style:italic;margin-top:6px}
+.hide-en .en{display:none}
+.panel{background:var(--card);border-radius:18px;padding:22px;box-shadow:0 2px 10px #0001;text-align:center}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:16px 0}
+.opt{padding:14px;font-size:1.1rem}
+.opt.ok{background:var(--ok);color:#fff}
+.opt.no{background:var(--bad);color:#fff}
+.flash{background:var(--card);border-radius:20px;padding:30px 20px;min-height:220px;cursor:pointer;box-shadow:0 2px 10px #0001;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:6px}
+.row{display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+.cmp{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:16px}
+.cmp .word .vi{font-size:1.25rem}
+.note{background:#fff3c4;border-radius:14px;padding:14px;margin-top:16px;font-size:.95rem}
+select{font:inherit;padding:8px 12px;border-radius:12px;border:1px solid var(--line);max-width:100%}
+.big{font-size:5rem}
+.foot{position:fixed;right:12px;bottom:8px;font-size:.8rem;color:var(--muted);background:#fffffff0;padding:4px 12px;border-radius:99px;box-shadow:0 1px 4px #0002}
+@media(max-width:600px){.em{font-size:2.4rem}.vi{font-size:1.25rem}}
+</style>
+</head>
+<body>
+<header>
+  <div class="hrow">
+    <div><h1>🇻🇳 Learn Vietnamese with Ha</h1><div class="sub">Essential Vietnamese Adjectives · Tính từ thiết yếu</div></div>
+    <div class="stats"><span id="st"></span><button class="toggle" id="lang" onclick="toggleEn()">Ẩn tiếng Anh</button></div>
+  </div>
+  <div class="bar"><div id="bar"></div></div>
+</header>
+<nav id="nav"></nav>
+<main id="main"></main>
+<div class="foot">Learn Vietnamese with Ha</div>
+
+<script>
+const RAW=[
+['to','big','🐘','Con voi rất to.','The elephant is very big.'],
+['nhỏ','small','🐱','Con mèo này rất nhỏ.','This cat is very small.'],
+['cao','tall/high','🏢','Tòa nhà này rất cao.','This building is very tall.'],
+['thấp','short/low','🪑','Cái ghế này rất thấp.','This chair is very low.'],
+['dài','long','🛣️','Con đường này rất dài.','This road is very long.'],
+['ngắn','short','👗','Cái váy này ngắn.','This skirt is short.'],
+['rộng','wide','🏠','Căn phòng này rất rộng.','This room is very spacious.'],
+['hẹp','narrow','🚪','Cái cửa này rất hẹp.','This door is very narrow.'],
+['dày','thick','📖','Cuốn sách này dày.','This book is thick.'],
+['mỏng','thin','📄','Tờ giấy này mỏng.','This sheet of paper is thin.'],
+['đẹp','beautiful','🌸','Cô ấy rất đẹp.','She is very beautiful.'],
+['xấu','ugly','😣','Cái áo này xấu.','This shirt is ugly.'],
+['trẻ','young','🧒','Anh ấy còn trẻ.','He is still young.'],
+['già','old','👴','Ông ấy đã già.','He is old.'],
+['béo','fat','🐈','Con mèo này rất béo.','This cat is very fat.'],
+['gầy','thin (person)','🧍','Chị ấy rất gầy.','She is very thin.'],
+['khỏe','healthy/strong','💪','Bố tôi vẫn khỏe.','My father is still healthy.'],
+['yếu','weak','🤒','Em bé còn yếu.','The baby is still weak.'],
+['dễ thương','cute','🐶','Con chó này dễ thương.','This dog is cute.'],
+['tốt','good','👍','Cà phê này rất tốt.','This coffee is very good.'],
+['xấu','bad','👎','Thời tiết hôm nay xấu.','The weather today is bad.'],
+['tốt bụng','kind','🤝','Cô giáo tôi rất tốt bụng.','My teacher is very kind.'],
+['thông minh','intelligent','🧠','Cậu bé rất thông minh.','The boy is very smart.'],
+['chăm chỉ','hard-working','📚','Bạn ấy rất chăm chỉ.','That friend is very hard-working.'],
+['lười','lazy','😴','Con mèo này rất lười.','This cat is very lazy.'],
+['dễ','easy','✅','Bài tập này dễ.','This exercise is easy.'],
+['khó','difficult','🧩','Bài toán này khó.','This math problem is difficult.'],
+['đúng','correct','✔️','Câu trả lời này đúng.','This answer is correct.'],
+['sai','wrong','❌','Đáp án này sai.','This answer is wrong.']
+];
+const GROUPS=[['Kích thước & hình dáng','Size & shape'],['Ngoại hình & con người','Appearance & people'],['Đánh giá & chất lượng','Judgement & quality']];
+const WORDS=RAW.map((r,i)=>({id:i,g:i<10?0:i<19?1:2,vi:r[0],en:r[1],em:r[2],ex:r[3],exEn:r[4]}));
+const TABS=[
+['learn','📘','Learn New Words','Học từ mới','Learn new words'],
+['practice','🎯','Practice','Luyện tập','Quizzes and exercises'],
+['comparison','⚖️','Comparison','Cấu trúc so sánh','Comparative & superlative'],
+['review','🔁','Review','Ôn tập từ vựng','Flashcards'],
+['progress','📊','My Progress','Tiến độ học tập','Score and progress']
+];
+
+let S;
+try{S=JSON.parse(localStorage.getItem('lvh-ha')||'null')}catch(e){S=null}
+if(!S)S={learned:[],score:0,tries:0};
+function save(){try{localStorage.setItem('lvh-ha',JSON.stringify(S))}catch(e){}}
+
+const $=id=>document.getElementById(id);
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const isL=id=>S.learned.includes(id);
+
+let tab='learn',gSel=-1,q=null,ri=0,flip=false,cmp=0,showEn=true;
+
+function go(t){tab=t;if(t==='practice'&&!q)newQ();flip=false;render();window.scrollTo(0,0)}
+function toggleEn(){showEn=!showEn;document.body.classList.toggle('hide-en',!showEn);$('lang').textContent=showEn?'Ẩn tiếng Anh':'Hiện tiếng Anh'}
+function toggleLearn(id){const k=S.learned.indexOf(id);k<0?S.learned.push(id):S.learned.splice(k,1);save();render()}
+
+function card(w){return `<div class="word ${isL(w.id)?'learned':''}">
+<div class="em">${w.em}</div><div class="vi">${w.vi}</div><div class="en">${w.en}</div>
+<div class="ex">${w.ex}</div><div class="en">${w.exEn}</div>
+<button class="chip ${isL(w.id)?'on':''}" onclick="toggleLearn(${w.id})">${isL(w.id)?'✓ Đã học':'+ Học xong'}</button></div>`}
+
+function vLearn(){
+  const list=gSel<0?WORDS:WORDS.filter(w=>w.g===gSel);
+  return `<div class="groups"><button class="chip ${gSel<0?'on':''}" onclick="gSel=-1;render()">Tất cả · All</button>
+${GROUPS.map((g,i)=>`<button class="chip ${gSel===i?'on':''}" onclick="gSel=${i};render()">${g[0]} <span class="en">· ${g[1]}</span></button>`).join('')}</div>
+<div class="grid">${list.map(card).join('')}</div>`;
+}
+
+function newQ(){const w=WORDS[Math.floor(Math.random()*WORDS.length)];
+  const others=shuffle(WORDS.filter(x=>x!==w)).slice(0,3);
+  q={w,opts:shuffle([w,...others]),sel:undefined}}
+function answer(id){
+  if(q.sel!==undefined)return;
+  q.sel=id;S.tries++;
+  if(id===q.w.id){S.score++;if(!isL(q.w.id))S.learned.push(q.w.id)}
+  save();render();
+}
+function vPractice(){
+  if(!q)newQ();
+  const w=q.w;
+  const cls=o=>q.sel===undefined?'':o.id===w.id?'ok':o.id===q.sel?'no':'';
+  return `<div class="panel">
+<p>Từ nào có nghĩa là <b>"${w.en}"</b>? <span class="en">Which Vietnamese word means "${w.en}"?</span></p>
+<div class="big">${w.em}</div>
+<div class="opts">${q.opts.map(o=>`<button class="opt ${cls(o)}" onclick="answer(${o.id})">${o.vi}</button>`).join('')}</div>
+${q.sel!==undefined?`<p>${q.sel===w.id?'✅ Đúng rồi!':'❌ Chưa đúng. Đáp án: <b>'+w.vi+'</b>'}</p>
+<p><i>${w.ex}</i> <span class="en">${w.exEn}</span></p>
+<button class="btn on" onclick="newQ();render()">Câu tiếp theo →</button>`:''}
+</div>`;
+}
+
+function vCmp(){
+  const w=WORDS[cmp],a=w.vi;
+  return `<p>Chọn tính từ · <span class="en">Choose an adjective</span></p>
+<select onchange="cmp=+this.value;render()">${WORDS.map((x,i)=>`<option value="${i}" ${i===cmp?'selected':''}>${x.vi} – ${x.en}</option>`).join('')}</select>
+<div class="cmp">
+  <div class="word"><div class="em">${w.em}</div><div class="vi">Nam ${a} hơn Lan.</div>
+    <div class="en"><b>A + adj + hơn + B</b></div><div class="en">Nam is more ${w.en.split('/')[0]} than Lan.</div></div>
+  <div class="word"><div class="em">🏆</div><div class="vi">Nam ${a} nhất lớp.</div>
+    <div class="en"><b>A + adj + nhất</b></div><div class="en">Nam is the most ${w.en.split('/')[0]} in the class.</div></div>
+  <div class="word"><div class="em">🟰</div><div class="vi">Nam ${a} bằng Lan.</div>
+    <div class="en"><b>A + adj + bằng + B</b></div><div class="en">Nam is as ${w.en.split('/')[0]} as Lan.</div></div>
+</div>
+<div class="note">📝 <b>Lưu ý:</b> Không dùng “rất” với “hơn” (✗ rất ${a} hơn). “Rất” chỉ nghĩa là <i>very</i>. Dùng “hơn” để so sánh hơn, “nhất” để so sánh nhất, “bằng” để so sánh ngang bằng.<br><span class="en">Note: don't combine “rất” with “hơn”. “Rất” means very only.</span></div>`;
+}
+
+function vReview(){
+  const pool=S.learned.length?WORDS.filter(w=>isL(w.id)):WORDS;
+  const n=pool.length,w=pool[((ri%n)+n)%n];
+  return `<p>${S.learned.length?'Ôn các từ đã học':'Chưa có từ đã học – đang ôn tất cả'} (${n}) · <span class="en">${S.learned.length?'Review learned words':'No learned words yet – reviewing all'}</span></p>
+<div class="flash" onclick="flip=!flip;render()">
+  <div class="em">${w.em}</div><div class="vi">${w.vi}</div>
+  ${flip?`<div class="en">${w.en}</div><div class="ex">${w.ex}</div>`:`<small>Chạm để xem nghĩa · Tap to see meaning</small>`}
+</div>
+<div class="row"><button class="chip" onclick="ri--;flip=false;render()">← Trước</button>
+<button class="chip" onclick="ri++;flip=false;render()">Tiếp →</button></div>`;
+}
+
+function vProgress(){
+  const acc=S.tries?Math.round(S.score/S.tries*100):0;
+  const groups=GROUPS.map((g,i)=>{const ws=WORDS.filter(w=>w.g===i),n=ws.filter(w=>isL(w.id)).length;
+    return `<div style="text-align:left;margin:10px 0"><b>${g[0]}</b> <span class="en">· ${g[1]} – ${n}/${ws.length}</span>
+    <div class="bar" style="margin:4px 0 0"><div style="width:${n/ws.length*100}%"></div></div></div>`}).join('');
+  return `<div class="panel">
+<div class="row" style="margin:0 0 14px">
+  <div class="chip"><b>${S.learned.length}/${WORDS.length}</b><br><span class="en">Từ đã học · Words</span></div>
+  <div class="chip"><b>${S.score}</b><br><span class="en">Điểm · Score</span></div>
+  <div class="chip"><b>${acc}%</b><br><span class="en">Chính xác · Accuracy</span></div>
+</div>${groups}
+<button class="chip" onclick="reset()">Đặt lại tiến độ · Reset</button></div>`;
+}
+function reset(){if(confirm('Xóa tiến độ? / Reset progress?')){S={learned:[],score:0,tries:0};q=null;save();render()}}
+
+function render(){
+  const n=S.learned.length,t=WORDS.length;
+  $('st').innerHTML=`📚 ${n}/${t} từ · ⭐ ${S.score} điểm`;
+  $('bar').style.width=(n/t*100)+'%';
+  $('nav').innerHTML=TABS.map(x=>`<button class="tile ${tab===x[0]?'on':''}" onclick="go('${x[0]}')">
+    <span class="ic">${x[1]}</span><b>${x[2]}</b><small>${x[3]}</small><small class="en">${x[4]}</small></button>`).join('');
+  $('main').innerHTML={learn:vLearn,practice:vPractice,comparison:vCmp,review:vReview,progress:vProgress}[tab]();
+}
+render();
+</script>
+</body>
+</html>
